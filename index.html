@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>آرایش الکترونی</title>
+<style>
+:root {
+--dist: 30px;
+--base: var(--dist);
+--elec-w: 10px;
+--kernel-w: calc(var(--elec-w) * 1.25);
+--d-time: 30s;
+--ring-outline-w: 5px;
+--top-dist: 20px; 
+--text-dist: 40px;
+--ring-color: deeppink;
+--elec-color: dodgerblue;
+--kernel-color: red;
+--text-color: deeppink;
+--text-size: 25px;
+}
+ /* Extra small devices (phones, 600px and down) */
+ @media only screen and (max-width: 600px) {
+  :root {
+    --dist: 24px;
+    --elec-w: 10px;
+    --ring-outline-w: 5px;
+  }
+ }
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  :root {
+    --dist: 30px;
+    --elec-w: 12.5px;
+    --ring-outline-w: 6.25px;
+  }
+
+}
+.lay {
+  margin-top: var(--text-dist);
+}
+.name, .lay {
+  color: var(--text-color);
+  text-align: center;
+  font-size: var(--text-size);
+}
+body {
+margin: 0;
+}
+.atom {
+  position: relative;
+  display: none;
+}
+.kernel {
+position: absolute;
+top: 50%;
+left: 50%;
+border-radius: 100%;
+width: var(--kernel-w);
+height: var(--kernel-w);
+margin-left: calc(var(--kernel-w) / -2);
+margin-top: calc(var(--kernel-w) / -2);
+background-color: var(--kernel-color);
+}
+.ring {
+border-collapse: separate;
+display: none;
+position: absolute;
+width: calc(2*(var(--base) + (var(--ringnum) - 1) * var(--dist)));
+height: calc(2*(var(--base) + (var(--ringnum) - 1) * var(--dist)));
+margin-left: calc(-1*(var(--base) + (var(--ringnum) - 1) * var(--dist)));
+margin-top: calc(-1*(var(--base) + (var(--ringnum) - 1) * var(--dist)));
+outline: var(--ring-outline-w) solid var(--ring-color);
+border-radius: 100%;
+background: transparent;
+top: 50%;
+left: 50%;
+}
+.atom .ring:not(:empty) {
+  display: block;
+}
+.ring:empty + .ring:not(:empty), .atom .ring:first-child {
+  position: relative;
+  margin-top: var(--top-dist);
+}
+
+
+.elec {
+--deg: calc((var(--number) * 360deg) / var(--elec-count));
+transform: rotate(var(--deg));
+background-color: var(--elec-color);
+position: absolute;
+width: var(--elec-w);
+height: var(--elec-w);
+margin-left: calc(var(--elec-w) / -2);
+margin-top: calc(var(--elec-w) / -2);
+border-radius: 100%;
+top: calc(50% - (var(--base) + (var(--ringnum) - 1) * var(--dist)) - (var(--ring-outline-w) / 2));
+left: 50%;
+transform-origin: 50% calc(50% + (var(--base) + (var(--ringnum) - 1) * var(--dist)) + (var(--ring-outline-w) / 2));
+animation-name: anim;
+animation-duration: calc((var(--ringnum) * var(--d-time)) / 40);
+animation-timing-function: linear;
+animation-iteration-count: infinite;
+}
+@keyframes anim {
+  from {
+    transform: rotate(var(--deg));
+  }
+
+  to {
+    transform: rotate(calc(var(--deg) + 360deg));
+  }
+}
+</style>
+</head>
+<body>
+<div class="atom">
+
+<div class="ring"></div>
+<div class="ring"></div>
+<div class="ring"></div>
+<div class="ring"></div>
+<div class="ring"></div>
+<div class="ring"></div>
+<div class="ring"></div>
+<div class="ring"></div>
+<div class="kernel"></div>
+</div>
+<p class="lay"></p>
+<p class="name"></p>
+<script>
+var atomic_name;
+var elements = ["H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe","Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu","Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm","Md","No","Lr","Rf","Db","Sg","Bh","Hs","Mt","Ds","Rg","Cn","Nh","Fl","Mc","Lv","Ts","Og"];
+function get_num(inp) {
+    var r = -1;
+    for(var i = 0; i < 118; i++) {
+    if(inp.toUpperCase() == elements[i].toUpperCase()) {
+        r = i + 1;
+        break;
+    }
+    }
+    return r; 
+}
+var input = (prompt("تعداد الکترون ها یا حروف لاتین عنصر را وارد کنید","")).trim();
+var isvalid = true;
+if(isNaN(input)) {
+  atomic_num = get_num(input);
+  if(atomic_num == -1) {
+    isvalid = false;
+  }
+} else {
+    atomic_num = parseInt(input);
+    if(atomic_num < 1 || atomic_num > 118) {
+      isvalid = false;
+    }
+}
+if(!isvalid) {
+  try {
+  Navigator.vibrate(100);
+  } catch {}
+  alert("ورودی نامعتبر است");
+} else {
+  var arr = Array(0,0,0,0,0,0,0,0), atomic_num, i = 0, num, m, z = 0, earr = Array();
+  var lay = Array("s","s","p","s","p","s","d","p","s","d","p","s","f","d","p","s","f","d","p","s");
+  var nums = Array(1,2,2,3,3,4,3,4,5,4,5,6,4,5,6,7,5,6,7,8);
+  var noble_gases = Array(2,10,18,36,54,86);
+  atomic_name = elements[atomic_num - 1];
+  num = atomic_num;
+  if(num >= 3) {
+    for(var x = 0; x < 6; x++) {
+	   if(num <= noble_gases[x]) {
+		    m = noble_gases[x - 1];
+		    break;
+	    } else {m = noble_gases[x];}
+    }
+  
+  for(var x = 0; x < 20; x++) {
+    if(z == m) {i = x; break;}
+    z += (lay[x] == "s" ? 2 : lay[x] == "p" ? 6 : lay[x] == "d" ? 10 : lay[x] == "f" ? 14 : 0);
+    arr[nums[x]-1] += (lay[x] == "s" ? 2 : lay[x] == "p" ? 6 : lay[x] == "d" ? 10 : lay[x] == "f" ? 14 : 0);
+  }
+  num -= m;
+  earr.push("["+elements[m - 1]+"]<sub>"+m+"</sub>");
+  }
+  while(num != 0) {
+    m = (lay[i] == "s" ? (atomic_num == 29 || atomic_num == 24 ? 1 : 2) : lay[i] == "p" ? 6 : lay[i] == "d" ? 10 : lay[i] == "f" ? 14 : 0);
+    arr[nums[i]-1] += (num >= m ? m : num);
+    earr.push(`${nums[i]}${lay[i]}<sup>${num >= m ? m : num}</sup>`);
+    num -= (num >= m ? m : num);
+    i++;
+  }
+  earr = earr.join(" ");
+  document.querySelector(".lay").innerHTML = earr;
+  document.querySelector(".name").innerHTML = `<sub>${atomic_num}</sub>${atomic_name}`;
+  var all_lays = document.querySelectorAll(".atom .ring");
+  for(var x = 7; x >= 0; x--) {
+    if(arr[x] == 0) {continue;}
+    all_lays[7 - x].style = `--ringnum: ${x + 1};--elec-count: ${arr[x]}`;
+    for(var y = 0; y < arr[x]; y++) {
+      all_lays[7 - x].innerHTML += `<div class="elec" style="--number: ${y}"></div>`;
+    }
+  }
+  document.querySelector(".atom").style.display = "block";
+  
+}
+</script>
+<!--by Kamyar Sahba-->
+</body>
+</html>
+
+
