@@ -11,22 +11,23 @@
 --base: var(--dist);
 --elec-w: 10px;
 --kernel-w: calc(var(--elec-w) * 1.25);
---d-time: 30s;
---ring-outline-w: 5px;
---top-dist: 20px; 
---text-dist: 40px;
---ring-color: deeppink;
---elec-color: dodgerblue;
---kernel-color: red;
---text-color: deeppink;
+--d-time: 50s;
+--ring-border-w: 5px;
+--top-dist: 15px; 
+--text-dist: 30px;
+--ring-color: #344444;
+--elec-color: #CC6699;
+--kernel-color: black;
+--text-color: #344444;
 --text-size: 25px;
+--speed-equal: 1;
 }
  /* Extra small devices (phones, 600px and down) */
  @media only screen and (max-width: 600px) {
   :root {
     --dist: 24px;
     --elec-w: 10px;
-    --ring-outline-w: 5px;
+    --ring-border-w: 5px;
   }
  }
 
@@ -35,14 +36,14 @@
   :root {
     --dist: 30px;
     --elec-w: 12.5px;
-    --ring-outline-w: 6.25px;
+    --ring-border-w: 6.25px;
   }
 
 }
 .lay {
   margin-top: var(--text-dist);
 }
-.name, .lay {
+.name, .lay, .persian {
   color: var(--text-color);
   text-align: center;
   font-size: var(--text-size);
@@ -58,7 +59,7 @@ margin: 0;
 position: absolute;
 top: 50%;
 left: 50%;
-border-radius: 100%;
+-moz-border-radius: 100%; -webkit-border-radius: 100%; border-radius: 100%;
 width: var(--kernel-w);
 height: var(--kernel-w);
 margin-left: calc(var(--kernel-w) / -2);
@@ -71,10 +72,10 @@ display: none;
 position: absolute;
 width: calc(2*(var(--base) + (var(--ringnum) - 1) * var(--dist)));
 height: calc(2*(var(--base) + (var(--ringnum) - 1) * var(--dist)));
-margin-left: calc(-1*(var(--base) + (var(--ringnum) - 1) * var(--dist)));
-margin-top: calc(-1*(var(--base) + (var(--ringnum) - 1) * var(--dist)));
-outline: var(--ring-outline-w) solid var(--ring-color);
-border-radius: 100%;
+margin-left: calc(-1*(var(--base) + (var(--ringnum) - 1) * var(--dist)) - var(--ring-border-w));
+margin-top: calc(-1*(var(--base) + (var(--ringnum) - 1) * var(--dist)) - var(--ring-border-w));
+border: var(--ring-border-w) solid var(--ring-color);
+-moz-border-radius: 100%; -webkit-border-radius: 100%; border-radius: 100%;
 background: transparent;
 top: 50%;
 left: 50%;
@@ -97,14 +98,25 @@ width: var(--elec-w);
 height: var(--elec-w);
 margin-left: calc(var(--elec-w) / -2);
 margin-top: calc(var(--elec-w) / -2);
-border-radius: 100%;
-top: calc(50% - (var(--base) + (var(--ringnum) - 1) * var(--dist)) - (var(--ring-outline-w) / 2));
+-moz-border-radius: 100%; -webkit-border-radius: 100%; border-radius: 100%;
+top: calc(50% - (var(--base) + (var(--ringnum) - 1) * var(--dist)) - (var(--ring-border-w) / 2));
 left: 50%;
-transform-origin: 50% calc(50% + (var(--base) + (var(--ringnum) - 1) * var(--dist)) + (var(--ring-outline-w) / 2));
+transform-origin: 50% calc(50% + (var(--base) + (var(--ringnum) - 1) * var(--dist)) + (var(--ring-border-w) / 2));
 animation-name: anim;
-animation-duration: calc((var(--ringnum) * var(--d-time)) / 40);
-animation-timing-function: linear;
-animation-iteration-count: infinite;
+animation-duration: calc((((var(--ringnum) * var(--speed-equal)) + ((1 - var(--speed-equal)))) * var(--d-time)) / 40);
+animation-timing-function: linear, linear;
+animation-iteration-count: infinite, 1;
+transform: translate(-50%,-50%);
+}
+@keyframes spin {
+  from {
+    transform-origin: 50% 50%;
+    top: 50%;
+  }
+  to {
+    transform-origin: 50% calc( (50% * (1 - var(--spin-enable))) + (var(--spin-enable)) * (50% + (var(--base) + (var(--ringnum) - 1) * var(--dist)) + (var(--ring-border-w) / 2)));
+    top: calc(50% - (var(--base) + (var(--ringnum) - 1) * var(--dist)) - (var(--ring-border-w) / 2));
+  }
 }
 @keyframes anim {
   from {
@@ -131,9 +143,11 @@ animation-iteration-count: infinite;
 <div class="kernel"></div>
 </div>
 <p class="lay"></p>
+<p class="persian"></p>
 <p class="name"></p>
 <script>
 var atomic_name;
+var atomNames = ["هیدروژن","هلیم","لیتیم","بریلیوم","بور","کربن","نیتروژن","اکسیژن","فلوئور","نئون","سدیم","منیزیم","آلومینیم","سیلیسیم","فسفر","گوگرد","کلر","آرگون","پتاسیم","کلسیم","اسکاندیم","تیتانیم","وانادیم","کروم","منگنز","آهن","کبالت","نیکل","مس","روی","گالیم","ژرمانیم","آرسنیک","سلنیم","برم","کریپتون","روبیدیم","استرانسیم","ایتریم","زیرکونیم","نیوبیم","مولیبدن","تکنسیم","روتنیم","رودیم","پالادیم","نقره","کادمیم","ایندیم","قلع","آنتیموان","تلوریم","ید","زنون","سزیم","باریم","لانتان","سریم","پرازئودیمیم","نئودیمیم","پرومتیم","ساماریم","یوروپیم","گادولینیم","تربیم","دیسپروزیم","هولمیم","اربیم","تولیم","ایتربیم","لوتتیم","هافنیم","تانتال","تنگستن","رنیوم","اسمیم","ایریدیم","پلاتین","طلا","جیوه","تالیم","سرب","بیسموت","پولونیم","آستاتین","رادون","فرانسیم","رادیم","اکتینیم","توریم","پروتاکتینیم","اورانیوم","نپتونیوم","پلوتونیم","امریسیم","کوریم","برکلیم","کالیفرنیم","اینشتینیم","فرمیم","مندلیفیم","نوبلیم","لارنسیم","رادرفوردیم","دوبنیم","سیبورگیم","بوریم","هاسیم","مایتنریم","دارمشتادیم","رونتگنیوم","کوپرنیسیم","نیهونیوم","فلروویوم","مسکوویم","لیورموریوم","تنسین","اوگانسون"];
 var elements = ["H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe","Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu","Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm","Md","No","Lr","Rf","Db","Sg","Bh","Hs","Mt","Ds","Rg","Cn","Nh","Fl","Mc","Lv","Ts","Og"];
 function get_num(inp) {
     var r = -1;
@@ -195,6 +209,7 @@ if(!isvalid) {
   }
   earr = earr.join(" ");
   document.querySelector(".lay").innerHTML = earr;
+  document.querySelector(".persian").innerHTML = atomNames[atomic_num - 1];
   document.querySelector(".name").innerHTML = `<sub>${atomic_num}</sub>${atomic_name}`;
   var all_lays = document.querySelectorAll(".atom .ring");
   for(var x = 7; x >= 0; x--) {
